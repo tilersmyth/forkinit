@@ -1,0 +1,9 @@
+{
+  "name": "forkinit",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
+}
