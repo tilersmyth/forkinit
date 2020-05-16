@@ -5,6 +5,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from './config/config.module';
 import { TypeormService } from './typeorm/typeorm.service';
 import { GraphqlService } from './graphql/graphql.service';
+import { RedisModule } from './redis/redis.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { GraphqlService } from './graphql/graphql.service';
     GraphQLModule.forRootAsync({
       useClass: GraphqlService,
     }),
+    RedisModule,
+    SessionModule,
   ],
 })
 export class CoreModule {}

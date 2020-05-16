@@ -12,4 +12,12 @@ export interface IConfig extends CleanEnv {
   DB_PASSWORD: string;
   DB_DATABASE: string;
   DB_SYNCHRONIZE: string;
+  // REDIS
+  REDIS_HOST: string;
+  REDIS_PORT: number;
+  REDIS_PASSWORD: string;
+  // SESSION
+  SESSION_NAME: string;
+  SESSION_SECRET: string;
+  SESSION_MAX_AGE: number;
 }
