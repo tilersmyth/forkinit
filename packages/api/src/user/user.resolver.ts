@@ -13,7 +13,7 @@ export class UserResolver {
 
   @Query(() => [UserEntity])
   async allUsers(): Promise<UserEntity[]> {
-    return this.userService.find();
+    return this.userService.findAll();
   }
 
   @Query(() => UserEntity, { nullable: true })

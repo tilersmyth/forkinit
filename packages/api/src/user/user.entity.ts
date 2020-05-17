@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  BeforeInsert,
-  BaseEntity,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   IsEmail,
@@ -15,6 +9,7 @@ import {
 } from 'class-validator';
 import * as bcryptjs from 'bcryptjs';
 
+import { BaseEntity } from '../base/base.entity';
 import { IsUserAlreadyExist } from './user.validator';
 
 @Entity('users')
