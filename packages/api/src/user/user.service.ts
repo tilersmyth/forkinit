@@ -1,7 +1,6 @@
 import { Injectable, ValidationError } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOneOptions } from 'typeorm';
-import { validate } from 'class-validator';
+import { Repository } from 'typeorm';
 import { ApolloError } from 'apollo-server-core';
 import * as bcryptjs from 'bcryptjs';
 
@@ -9,13 +8,16 @@ import { UserEntity } from './user.entity';
 import { UserRegisterInput } from './inputs/register.input';
 import { UserLoginInput } from './inputs/login.input';
 import { ExpressRequest } from '../types';
+import { CrudService } from '../base/crud.service';
 
 @Injectable()
-export class UserService {
+export class UserService extends CrudService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
     protected readonly repository: Repository<UserEntity>,
-  ) {}
+  ) {
+    super();
+  }
 
   private static validationFormatter(
     acc: { [key: string]: string },
@@ -48,32 +50,11 @@ export class UserService {
     }
   }
 
-  public async findOne(
-    options?: FindOneOptions<UserEntity>,
-  ): Promise<UserEntity | null> {
-    try {
-      const result = await this.repository.findOneOrFail(options);
-      return result;
-    } catch (err) {
-      return null;
-    }
-  }
-
-  public async find(): Promise<UserEntity[]> {
-    return this.repository.find();
-  }
-
   public async register(input: UserRegisterInput): Promise<UserEntity> {
     try {
       const register = new UserEntity();
       Object.assign(register, input);
-      const errors = await validate(register);
-
-      if (errors.length > 0) {
-        throw errors;
-      }
-
-      return this.repository.save(register);
+      return this.save(register);
     } catch (err) {
       throw new ApolloError(
         'validation',

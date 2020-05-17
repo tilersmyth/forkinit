@@ -2,31 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Mutation {
-  register(input: UserRegisterInput!): UserEntity!
-  login(input: UserLoginInput!): UserEntity!
-}
-
-type Query {
-  allUsers: [UserEntity!]!
-  me: UserEntity
-}
-
 type UserEntity {
+  created_at: Date!
+  updated_at: Date!
   id: ID!
   first_name: String!
   last_name: String!
   email: String!
 }
 
-input UserLoginInput {
-  email: String!
-  password: String!
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  allUsers: [UserEntity!]!
+  me: UserEntity
+}
+
+type Mutation {
+  register(input: UserRegisterInput!): UserEntity!
+  login(input: UserLoginInput!): UserEntity!
 }
 
 input UserRegisterInput {
   first_name: String!
   last_name: String!
+  email: String!
+  password: String!
+}
+
+input UserLoginInput {
   email: String!
   password: String!
 }
