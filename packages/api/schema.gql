@@ -14,14 +14,33 @@ type UserEntity {
 """Date custom scalar type"""
 scalar Date
 
+type CompanyEntity {
+  created_at: Date!
+  updated_at: Date!
+  id: ID!
+  name: String!
+  active: Boolean!
+  stage: [CompanyStageEnum!]
+}
+
+enum CompanyStageEnum {
+  ADDRESS
+  DEVICES
+  MEMBERS
+  MENUS
+  ORDER_POINTS
+}
+
 type Query {
   allUsers: [UserEntity!]!
   me: UserEntity
+  findCompany: CompanyEntity!
 }
 
 type Mutation {
   register(input: UserRegisterInput!): UserEntity!
   login(input: UserLoginInput!): UserEntity!
+  createCompany(name: String!): CompanyEntity!
 }
 
 input UserRegisterInput {
