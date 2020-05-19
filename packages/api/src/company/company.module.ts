@@ -5,9 +5,10 @@ import { CompanyEntity } from './company.entity';
 import { CompanyService } from './company.service';
 import { CompanyResolver } from './company.resolver';
 import { CompanyMiddleware } from './company.middleware';
+import { CompanyAddressModule } from './address/address.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CompanyEntity])],
+  imports: [TypeOrmModule.forFeature([CompanyEntity]), CompanyAddressModule],
   providers: [CompanyService, CompanyResolver],
   exports: [],
 })
