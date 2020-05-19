@@ -1,9 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Length } from 'class-validator';
 
 import { BaseEntity } from '../base/base.entity';
-import { CompanyStageEnum } from './enums/stage.enum';
+import { CompanyAddressEntity } from './address/address.entity';
 
 @Entity('companies')
 @ObjectType()
@@ -21,7 +27,15 @@ export class CompanyEntity extends BaseEntity {
   @Field(() => Boolean)
   public active!: boolean;
 
-  @Column('simple-array', { array: true, nullable: true })
-  @Field(() => [CompanyStageEnum], { nullable: true })
-  public stage?: CompanyStageEnum[];
+  @Column('boolean', { default: false })
+  @Field(() => Boolean)
+  public setup!: boolean;
+
+  @OneToOne(
+    () => CompanyAddressEntity,
+    address => address.company,
+    { nullable: true },
+  )
+  @JoinColumn()
+  public address?: CompanyAddressEntity;
 }
