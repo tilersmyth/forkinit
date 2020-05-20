@@ -9,36 +9,44 @@ import {
 } from 'class-validator';
 import * as bcryptjs from 'bcryptjs';
 
-import { BaseEntity } from '../base/base.entity';
+import { BaseEntity } from '../../base/base.entity';
 import { IsUserAlreadyExist } from './user.validator';
+import { UserTypeEnum } from './enums/type.enum';
 
 @Entity('users')
 @ObjectType()
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
-  public id?: string;
+  public id!: string;
 
   @Column('text')
   @Length(3, 50, { message: 'must be between 3 and 50 characters' })
   @Field(() => String)
-  public first_name?: string;
+  public first_name!: string;
 
   @Column('text')
   @Length(3, 50, { message: 'must be between 3 and 50 characters' })
   @Field(() => String)
-  public last_name?: string;
+  public last_name!: string;
 
   @Column({ type: 'varchar', length: 255 })
   @IsEmail({}, { message: 'invalid format' })
   @ValidateIf(u => !u.id)
   @Validate(IsUserAlreadyExist)
   @Field(() => String)
-  public email?: string;
+  public email!: string;
 
   @Column('text')
   @MinLength(8, { message: '8 character minimum' })
-  public password?: string;
+  public password!: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserTypeEnum,
+  })
+  @Field(() => UserTypeEnum)
+  public type!: UserTypeEnum;
 
   @BeforeInsert()
   hashPasswordBeforeInsert() {

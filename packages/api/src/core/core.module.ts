@@ -7,7 +7,7 @@ import { TypeormService } from './typeorm/typeorm.service';
 import { GraphqlService } from './graphql/graphql.service';
 import { RedisModule } from './redis/redis.module';
 import { SessionModule } from './session/session.module';
-import { UserModule } from '../user/user.module';
+import { EmployeeModule } from '../company/employee/employee.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { UserModule } from '../user/user.module';
       useClass: TypeormService,
     }),
     GraphQLModule.forRootAsync({
-      imports: [UserModule],
+      imports: [EmployeeModule],
       useClass: GraphqlService,
     }),
     RedisModule,
