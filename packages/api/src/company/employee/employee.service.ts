@@ -9,7 +9,7 @@ import { EmployeeEntity } from './employee.entity';
 import { CreateEmployeeInput } from './inputs/create.input';
 import { CompanyEntity } from '../company.entity';
 import { UserService } from '../../shared/user/user.service';
-import { UserTypeEnum } from '../../shared/user/enums/type.enum';
+import { UserContextEnum } from '../../shared/user/enums/context.enum';
 import { orderCodeGenerator } from '../../utils/pin-generator';
 import { ExpressRequest } from '../../types';
 import { UserLoginInput } from '../../shared/user/inputs/login.input';
@@ -59,7 +59,7 @@ export class EmployeeService extends CrudService<EmployeeEntity> {
       if (input.user) {
         // User data will be supplied if admin user requiring email account
         employee.user = await this.userService.save({
-          type: UserTypeEnum.EMPLOYEE,
+          context: UserContextEnum.EMPLOYEE,
           ...input.user,
         });
       }

@@ -7,12 +7,14 @@ import { CompanyResolver } from './company.resolver';
 import { CompanyMiddleware } from './company.middleware';
 import { EmployeeModule } from './employee/employee.module';
 import { CompanyAddressModule } from './address/address.module';
+import { OrderPointModule } from './order-point/order-point.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CompanyEntity]),
     EmployeeModule,
     CompanyAddressModule,
+    OrderPointModule,
   ],
   providers: [CompanyService, CompanyResolver],
   exports: [],

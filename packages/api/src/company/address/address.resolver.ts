@@ -6,7 +6,7 @@ import { CompanyAddressEntity } from './address.entity';
 import { CompanyEntity } from '../company.entity';
 import { CompanyAddressInput } from './inputs/address.input';
 
-@Resolver('Company/Address')
+@Resolver(() => CompanyAddressEntity)
 export class CompanyAddressResolver {
   constructor(private readonly addressService: CompanyAddressService) {}
 

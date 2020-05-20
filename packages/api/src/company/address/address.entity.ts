@@ -19,5 +19,5 @@ export class CompanyAddressEntity extends AddressEntity {
     () => CompanyEntity,
     company => company.address,
   )
-  company!: CompanyEntity;
+  public company!: CompanyEntity;
 }

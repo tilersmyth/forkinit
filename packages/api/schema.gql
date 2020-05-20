@@ -19,6 +19,15 @@ type CompanyAddressEntity {
 """Date custom scalar type"""
 scalar Date
 
+type OrderPointEntity {
+  created_at: Date!
+  updated_at: Date!
+  id: ID!
+  label: String!
+  note: String
+  active: Boolean!
+}
+
 type CompanyEntity {
   created_at: Date!
   updated_at: Date!
@@ -26,6 +35,7 @@ type CompanyEntity {
   name: String!
   active: Boolean!
   setup: Boolean!
+  order_points: [OrderPointEntity!]!
 }
 
 type UserEntity {
@@ -35,10 +45,10 @@ type UserEntity {
   first_name: String!
   last_name: String!
   email: String!
-  type: UserTypeEnum!
+  context: UserContextEnum!
 }
 
-enum UserTypeEnum {
+enum UserContextEnum {
   CUSTOMER
   EMPLOYEE
 }
@@ -65,6 +75,7 @@ type Mutation {
   employeeDeviceLogin(input: DeviceLoginInput!): EmployeeEntity!
   createCompany(name: String!): CompanyEntity!
   createCompanyAddress(input: CompanyAddressInput!): CompanyAddressEntity!
+  createOrderPoint(input: OrderPointInput!): OrderPointEntity!
 }
 
 input CreateEmployeeInput {
@@ -98,4 +109,9 @@ input CompanyAddressInput {
   country: String!
   coord_lat: Float!
   coord_lng: Float!
+}
+
+input OrderPointInput {
+  label: String!
+  note: String
 }
