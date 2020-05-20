@@ -11,7 +11,7 @@ import * as bcryptjs from 'bcryptjs';
 
 import { BaseEntity } from '../../base/base.entity';
 import { IsUserAlreadyExist } from './user.validator';
-import { UserTypeEnum } from './enums/type.enum';
+import { UserContextEnum } from './enums/context.enum';
 
 @Entity('users')
 @ObjectType()
@@ -43,10 +43,10 @@ export class UserEntity extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: UserTypeEnum,
+    enum: UserContextEnum,
   })
-  @Field(() => UserTypeEnum)
-  public type!: UserTypeEnum;
+  @Field(() => UserContextEnum)
+  public context!: UserContextEnum;
 
   @BeforeInsert()
   hashPasswordBeforeInsert() {

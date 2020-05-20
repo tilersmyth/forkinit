@@ -4,12 +4,14 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Length } from 'class-validator';
 
 import { BaseEntity } from '../base/base.entity';
 import { CompanyAddressEntity } from './address/address.entity';
+import { OrderPointEntity } from './order-point/order-point.entity';
 
 @Entity('companies')
 @ObjectType()
@@ -38,4 +40,12 @@ export class CompanyEntity extends BaseEntity {
   )
   @JoinColumn()
   public address?: CompanyAddressEntity;
+
+  @OneToMany(
+    () => OrderPointEntity,
+    order_point => order_point.company,
+    { nullable: true },
+  )
+  @Field(() => [OrderPointEntity])
+  public order_points?: OrderPointEntity[];
 }
