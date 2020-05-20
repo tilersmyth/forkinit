@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { GqlOptionsFactory, GqlModuleOptions } from '@nestjs/graphql';
 
 import { ConfigService } from '../config/config.service';
-import { UserService } from '../../user/user.service';
+import { EmployeeService } from '../../company/employee/employee.service';
 
 @Injectable()
 export class GraphqlService implements GqlOptionsFactory {
   constructor(
     private readonly config: ConfigService,
-    private readonly userService: UserService,
+    private readonly employeeService: EmployeeService,
   ) {}
 
   createGqlOptions(): GqlModuleOptions {
@@ -29,7 +29,7 @@ export class GraphqlService implements GqlOptionsFactory {
         return {
           ...ctx,
           req,
-          user: await this.userService.validateUserSession(req),
+          employee: await this.employeeService.validateSession(req),
         };
       },
     };

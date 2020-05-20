@@ -2,18 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserEntity {
-  created_at: Date!
-  updated_at: Date!
-  id: ID!
-  first_name: String!
-  last_name: String!
-  email: String!
-}
-
-"""Date custom scalar type"""
-scalar Date
-
 type CompanyAddressEntity {
   created_at: Date!
   updated_at: Date!
@@ -28,6 +16,9 @@ type CompanyAddressEntity {
   coord_lng: Float!
 }
 
+"""Date custom scalar type"""
+scalar Date
+
 type CompanyEntity {
   created_at: Date!
   updated_at: Date!
@@ -37,17 +28,48 @@ type CompanyEntity {
   setup: Boolean!
 }
 
+type UserEntity {
+  created_at: Date!
+  updated_at: Date!
+  id: ID!
+  first_name: String!
+  last_name: String!
+  email: String!
+  type: UserTypeEnum!
+}
+
+enum UserTypeEnum {
+  CUSTOMER
+  EMPLOYEE
+}
+
+type EmployeeEntity {
+  created_at: Date!
+  updated_at: Date!
+  id: ID!
+  nickname: String!
+  device_pin: String!
+  pin_is_temp: Boolean!
+  company: CompanyEntity!
+  user: UserEntity
+}
+
 type Query {
-  allUsers: [UserEntity!]!
-  me: UserEntity
+  employee: EmployeeEntity
   findCompany: CompanyEntity!
 }
 
 type Mutation {
-  register(input: UserRegisterInput!): UserEntity!
-  login(input: UserLoginInput!): UserEntity!
+  employeeCreate(input: CreateEmployeeInput!): EmployeeEntity!
+  employeeAdminLogin(input: UserLoginInput!): EmployeeEntity!
+  employeeDeviceLogin(input: DeviceLoginInput!): EmployeeEntity!
   createCompany(name: String!): CompanyEntity!
   createCompanyAddress(input: CompanyAddressInput!): CompanyAddressEntity!
+}
+
+input CreateEmployeeInput {
+  nickname: String!
+  user: UserRegisterInput
 }
 
 input UserRegisterInput {
@@ -60,6 +82,11 @@ input UserRegisterInput {
 input UserLoginInput {
   email: String!
   password: String!
+}
+
+input DeviceLoginInput {
+  nickname: String!
+  device_pin: String!
 }
 
 input CompanyAddressInput {
