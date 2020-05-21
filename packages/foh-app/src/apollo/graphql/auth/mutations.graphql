@@ -1,0 +1,5 @@
+mutation EmployeeAdminLogin($input: UserLoginInput!) {
+  employeeAdminLogin(input: $input) {
+    id
+  }
+}
