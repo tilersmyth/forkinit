@@ -1,15 +1,16 @@
-// Generates random pin that falls between 1 - 9999
+// Generates random pin that falls between 1 - 9n (n=length)
 // Backfills with zeros if necessary to achieve specified length
 
+function digitFill(length: number, fill: number) {
+  return new Array(length).fill(fill).join('');
+}
+
 export const orderCodeGenerator = (length: number) => {
-  const max = Number(
-    Array(length)
-      .fill(9)
-      .join(''),
-  );
-  const int = Math.floor(Math.random() * max) + 1;
-  const intString = int.toString();
-  return intString.length < length
-    ? new Array(length - intString.length + 1).join('') + int
-    : intString;
+  const max = Number(digitFill(length, 9));
+
+  const int = (Math.floor(Math.random() * max) + 1).toString();
+
+  return int.length < length
+    ? digitFill(length - int.length, 0).concat(int)
+    : int;
 };
