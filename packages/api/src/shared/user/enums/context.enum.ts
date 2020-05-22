@@ -1,8 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum UserContextEnum {
-  CUSTOMER,
-  EMPLOYEE,
+  CUSTOMER = 'customer',
+  EMPLOYEE = 'employee',
 }
 
 registerEnumType(UserContextEnum, {
