@@ -1,11 +1,13 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-import { EmployeeEntity } from './employee.entity';
+import { ExpressRequest } from '../../types';
+import { IEmployeeSession } from './interfaces/session.interface';
 
-export const Employee = createParamDecorator(
-  (_data: unknown, context: ExecutionContext): EmployeeEntity | undefined => {
-    const ctx = GqlExecutionContext.create(context);
-    return ctx.getContext().employee;
+export const EmployeeSession = createParamDecorator(
+  (_data: unknown, ctx: ExecutionContext): IEmployeeSession | undefined => {
+    const context = GqlExecutionContext.create(ctx);
+    const req: ExpressRequest = context.getContext().req;
+    return req.employee;
   },
 );

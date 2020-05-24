@@ -20,4 +20,6 @@ export interface IConfig extends CleanEnv {
   SESSION_NAME: string;
   SESSION_SECRET: string;
   SESSION_MAX_AGE: number;
+  // JWT
+  JWT_SECRET: string;
 }

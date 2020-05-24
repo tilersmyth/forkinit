@@ -7,18 +7,19 @@ import { Company } from '../company.decorator';
 import { CompanyEntity } from '../company.entity';
 import { UserLoginInput } from '../../shared/user/inputs/login.input';
 import { ExpressContext } from '../../types';
-import { Employee } from './employee.decorator';
+import { EmployeeSession } from './employee.decorator';
 import { DeviceLoginInput } from './inputs/device-login.input';
+import { EmployeeSessionDto } from './dto/session.dto';
 
 @Resolver(() => EmployeeEntity)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @Query(() => EmployeeEntity, { nullable: true })
+  @Query(() => EmployeeSessionDto, { nullable: true })
   async employee(
-    @Employee() employee: EmployeeEntity,
-  ): Promise<EmployeeEntity> {
-    return employee;
+    @EmployeeSession() session: EmployeeSessionDto,
+  ): Promise<EmployeeSessionDto> {
+    return session;
   }
 
   @Mutation(() => EmployeeEntity)
@@ -38,11 +39,10 @@ export class EmployeeResolver {
   }
 
   @Mutation(() => EmployeeEntity)
-  async employeeDeviceLogin(
+  async employeeStaffLogin(
     @Company() company: CompanyEntity,
     @Args('input') input: DeviceLoginInput,
-    @Context() ctx: ExpressContext,
   ) {
-    return this.employeeService.deviceLogin(company, input, ctx.req);
+    return this.employeeService.staffLogin(company, input);
   }
 }
