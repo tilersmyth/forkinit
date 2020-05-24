@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApolloError } from 'apollo-server-core';
-import * as bcryptjs from 'bcryptjs';
+import { compareSync, hashSync, genSaltSync } from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import { CrudService } from '../../base/crud.service';
 import { EmployeeEntity } from './employee.entity';
@@ -14,6 +15,7 @@ import { orderCodeGenerator } from '../../utils/pin-generator';
 import { ExpressRequest } from '../../types';
 import { UserLoginInput } from '../../shared/user/inputs/login.input';
 import { DeviceLoginInput } from './inputs/device-login.input';
+import { ConfigService } from 'api/src/core/config/config.service';
 
 @Injectable()
 export class EmployeeService extends CrudService<EmployeeEntity> {
@@ -21,31 +23,9 @@ export class EmployeeService extends CrudService<EmployeeEntity> {
     @InjectRepository(EmployeeEntity)
     protected readonly repository: Repository<EmployeeEntity>,
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {
     super();
-  }
-
-  async validateSession(
-    req: ExpressRequest,
-  ): Promise<EmployeeEntity | undefined> {
-    // Graphql Playground IntrospectionQuery DOT NOT Validate
-    if (req.body && req.body.query.includes('IntrospectionQuery')) {
-      return;
-    }
-
-    if (!req.session.employeeId) {
-      return;
-    }
-
-    try {
-      return this.repository
-        .createQueryBuilder('employee')
-        .where('employee.id = :id', { id: req.session.employeeId })
-        .leftJoinAndSelect('employee.user', 'user')
-        .getOne();
-    } catch (error) {
-      return;
-    }
   }
 
   public async createEmployee(
@@ -66,8 +46,8 @@ export class EmployeeService extends CrudService<EmployeeEntity> {
 
       const tempPin = orderCodeGenerator(4);
 
-      const salt = bcryptjs.genSaltSync();
-      employee.device_pin = bcryptjs.hashSync(tempPin, salt);
+      const salt = genSaltSync();
+      employee.device_pin = hashSync(tempPin, salt);
       employee.company = company;
       const savedEmployee = await this.save(employee);
 
@@ -89,7 +69,7 @@ export class EmployeeService extends CrudService<EmployeeEntity> {
         where: { email: input.email },
       });
 
-      if (!user || !bcryptjs.compareSync(input.password, user.password)) {
+      if (!user || !compareSync(input.password, user.password)) {
         throw new ApolloError('validation', '', {
           form: 'Invalid email or password',
         });
@@ -111,10 +91,9 @@ export class EmployeeService extends CrudService<EmployeeEntity> {
     }
   }
 
-  public async deviceLogin(
+  public async staffLogin(
     company: CompanyEntity,
     input: DeviceLoginInput,
-    req: ExpressRequest,
   ): Promise<EmployeeEntity> {
     try {
       const employee = await this.repository
@@ -129,14 +108,19 @@ export class EmployeeService extends CrudService<EmployeeEntity> {
       if (
         !employee ||
         !employee.device_pin ||
-        !bcryptjs.compareSync(input.device_pin, employee.device_pin)
+        !compareSync(input.device_pin, employee.device_pin)
       ) {
         throw new ApolloError('validation', '', {
           form: 'Invalid pin',
         });
       }
 
-      req.session.employeeId = employee.id;
+      const token = jwt.sign(
+        { staffId: employee.id },
+        this.configService.JWT_SECRET,
+      );
+
+      console.log(token);
 
       return employee;
     } catch (err) {

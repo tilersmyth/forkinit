@@ -18,7 +18,7 @@ export class CompanyMiddleware implements NestMiddleware {
         req.headers.c_id as string,
       );
 
-      req.company = company;
+      Object.assign(req, { company });
     } catch (err) {
     } finally {
       next();

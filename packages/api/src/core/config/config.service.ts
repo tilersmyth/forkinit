@@ -81,6 +81,12 @@ export class ConfigService {
     return Number(this.envConfig.SESSION_MAX_AGE);
   }
 
+  // JWT
+
+  get JWT_SECRET(): string {
+    return this.envConfig.JWT_SECRET;
+  }
+
   // ENV (envalid defaults)
 
   get isProduction(): boolean {
@@ -116,6 +122,8 @@ export class ConfigService {
       SESSION_NAME: envalid.str(),
       SESSION_SECRET: envalid.str(),
       SESSION_MAX_AGE: envalid.num(),
+      // JWT
+      JWT_SECRET: envalid.str(),
     };
 
     return envalid.cleanEnv(process.env, rule, { dotEnvPath });

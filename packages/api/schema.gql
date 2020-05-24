@@ -64,16 +64,21 @@ type EmployeeEntity {
   user: UserEntity
 }
 
+type EmployeeSessionDto {
+  admin: EmployeeEntity!
+  staff: EmployeeEntity
+}
+
 type Query {
-  employee: EmployeeEntity
   findCompany: CompanyEntity!
+  employee: EmployeeSessionDto
 }
 
 type Mutation {
+  createCompany(name: String!): CompanyEntity!
   employeeCreate(input: CreateEmployeeInput!): EmployeeEntity!
   employeeAdminLogin(input: UserLoginInput!): EmployeeEntity!
-  employeeDeviceLogin(input: DeviceLoginInput!): EmployeeEntity!
-  createCompany(name: String!): CompanyEntity!
+  employeeStaffLogin(input: DeviceLoginInput!): EmployeeEntity!
   createCompanyAddress(input: CompanyAddressInput!): CompanyAddressEntity!
   createOrderPoint(input: OrderPointInput!): OrderPointEntity!
 }
