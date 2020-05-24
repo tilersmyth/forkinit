@@ -1,17 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  DefaultTheme,
+  Provider as PaperProvider,
+  Colors,
+} from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+
+import { RootNavigator } from "./navigators/root.navigator";
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: Colors.blue400,
+  },
+};
 
 export const Main: React.FunctionComponent = () => (
-  <View style={styles.container}>
-    <Text>Open up App.tsx to start working on your app!</Text>
-  </View>
+  <PaperProvider theme={theme}>
+    <NavigationContainer>
+      <RootNavigator />
+    </NavigationContainer>
+  </PaperProvider>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
