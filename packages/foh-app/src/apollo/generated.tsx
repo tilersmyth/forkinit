@@ -81,35 +81,28 @@ export type EmployeeEntity = {
   user?: Maybe<UserEntity>;
 };
 
+export type EmployeeSessionDto = {
+  __typename?: 'EmployeeSessionDto';
+  admin: EmployeeEntity;
+  staff?: Maybe<EmployeeEntity>;
+};
+
 export type Query = {
   __typename?: 'Query';
-  employee?: Maybe<EmployeeEntity>;
+  appState: AppState;
+  employee?: Maybe<EmployeeSessionDto>;
   findCompany: CompanyEntity;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  employeeCreate: EmployeeEntity;
-  employeeAdminLogin: EmployeeEntity;
-  employeeDeviceLogin: EmployeeEntity;
   createCompany: CompanyEntity;
   createCompanyAddress: CompanyAddressEntity;
   createOrderPoint: OrderPointEntity;
-};
-
-
-export type MutationEmployeeCreateArgs = {
-  input: CreateEmployeeInput;
-};
-
-
-export type MutationEmployeeAdminLoginArgs = {
-  input: UserLoginInput;
-};
-
-
-export type MutationEmployeeDeviceLoginArgs = {
-  input: DeviceLoginInput;
+  employeeAdminLogin: EmployeeEntity;
+  employeeCreate: EmployeeEntity;
+  employeeStaffLogin: EmployeeEntity;
+  setAppState: AppState;
 };
 
 
@@ -125,6 +118,21 @@ export type MutationCreateCompanyAddressArgs = {
 
 export type MutationCreateOrderPointArgs = {
   input: OrderPointInput;
+};
+
+
+export type MutationEmployeeAdminLoginArgs = {
+  input: UserLoginInput;
+};
+
+
+export type MutationEmployeeCreateArgs = {
+  input: CreateEmployeeInput;
+};
+
+
+export type MutationEmployeeStaffLoginArgs = {
+  input: DeviceLoginInput;
 };
 
 export type CreateEmployeeInput = {
@@ -165,6 +173,42 @@ export type OrderPointInput = {
   note?: Maybe<Scalars['String']>;
 };
 
+export type AppState = {
+  __typename?: 'AppState';
+  id: Scalars['String'];
+  company?: Maybe<Scalars['Boolean']>;
+  device?: Maybe<Scalars['Boolean']>;
+  admin?: Maybe<Scalars['Boolean']>;
+  staff?: Maybe<Scalars['Boolean']>;
+};
+
+export type AppStateFragment = (
+  { __typename?: 'AppState' }
+  & Pick<AppState, 'id' | 'company' | 'device' | 'admin' | 'staff'>
+);
+
+export type SetAppStateMutationVariables = {};
+
+
+export type SetAppStateMutation = (
+  { __typename?: 'Mutation' }
+  & { setAppState: (
+    { __typename?: 'AppState' }
+    & AppStateFragment
+  ) }
+);
+
+export type GetAppStateQueryVariables = {};
+
+
+export type GetAppStateQuery = (
+  { __typename?: 'Query' }
+  & { appState: (
+    { __typename?: 'AppState' }
+    & AppStateFragment
+  ) }
+);
+
 export type EmployeeAdminLoginMutationVariables = {
   input: UserLoginInput;
 };
@@ -178,7 +222,71 @@ export type EmployeeAdminLoginMutation = (
   ) }
 );
 
+export const AppStateFragmentDoc = gql`
+    fragment AppState on AppState {
+  id
+  company
+  device
+  admin
+  staff
+}
+    `;
+export const SetAppStateDocument = gql`
+    mutation SetAppState {
+  setAppState @client {
+    ...AppState
+  }
+}
+    ${AppStateFragmentDoc}`;
+export type SetAppStateMutationFn = ApolloReactCommon.MutationFunction<SetAppStateMutation, SetAppStateMutationVariables>;
+export type SetAppStateComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SetAppStateMutation, SetAppStateMutationVariables>, 'mutation'>;
 
+    export const SetAppStateComponent = (props: SetAppStateComponentProps) => (
+      <ApolloReactComponents.Mutation<SetAppStateMutation, SetAppStateMutationVariables> mutation={SetAppStateDocument} {...props} />
+    );
+    
+export type SetAppStateProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
+      [key in TDataName]: ApolloReactCommon.MutationFunction<SetAppStateMutation, SetAppStateMutationVariables>
+    } & TChildProps;
+export function withSetAppState<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  SetAppStateMutation,
+  SetAppStateMutationVariables,
+  SetAppStateProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withMutation<TProps, SetAppStateMutation, SetAppStateMutationVariables, SetAppStateProps<TChildProps, TDataName>>(SetAppStateDocument, {
+      alias: 'setAppState',
+      ...operationOptions
+    });
+};
+export type SetAppStateMutationResult = ApolloReactCommon.MutationResult<SetAppStateMutation>;
+export type SetAppStateMutationOptions = ApolloReactCommon.BaseMutationOptions<SetAppStateMutation, SetAppStateMutationVariables>;
+export const GetAppStateDocument = gql`
+    query GetAppState {
+  appState @client {
+    ...AppState
+  }
+}
+    ${AppStateFragmentDoc}`;
+export type GetAppStateComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetAppStateQuery, GetAppStateQueryVariables>, 'query'>;
+
+    export const GetAppStateComponent = (props: GetAppStateComponentProps) => (
+      <ApolloReactComponents.Query<GetAppStateQuery, GetAppStateQueryVariables> query={GetAppStateDocument} {...props} />
+    );
+    
+export type GetAppStateProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<GetAppStateQuery, GetAppStateQueryVariables>
+    } & TChildProps;
+export function withGetAppState<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetAppStateQuery,
+  GetAppStateQueryVariables,
+  GetAppStateProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, GetAppStateQuery, GetAppStateQueryVariables, GetAppStateProps<TChildProps, TDataName>>(GetAppStateDocument, {
+      alias: 'getAppState',
+      ...operationOptions
+    });
+};
+export type GetAppStateQueryResult = ApolloReactCommon.QueryResult<GetAppStateQuery, GetAppStateQueryVariables>;
 export const EmployeeAdminLoginDocument = gql`
     mutation EmployeeAdminLogin($input: UserLoginInput!) {
   employeeAdminLogin(input: $input) {

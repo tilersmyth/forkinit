@@ -1,0 +1,7 @@
+fragment AppState on AppState {
+  id
+  company
+  device
+  admin
+  staff
+}
