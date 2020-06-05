@@ -1,0 +1,5 @@
+query GetAppState {
+  appState @client {
+    ...AppState
+  }
+}

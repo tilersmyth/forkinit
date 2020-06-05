@@ -1,19 +1,18 @@
 import Constants from "expo-constants";
-import { Platform } from "react-native";
 
-const localhost =
-  Platform.OS === "ios"
-    ? "http://localhost:4000/graphql"
-    : "10.0.2.2:4000/graphql";
+// A: 30.147.208.136
+// B: 10.0.0.243
 
 const ENV = {
   dev: {
-    API_HOST: localhost,
+    API_HOST: "http://10.0.0.243:4000/graphql",
     COOKIE_NAME: "sid",
+    COMPANY_ID: "company_id",
   },
   prod: {
     API_HOST: "[to do]",
     COOKIE_NAME: "[to do]",
+    COMPANY_ID: "company_id",
   },
 };
 
@@ -29,4 +28,4 @@ const getEnvVars = (env = Constants.manifest.releaseChannel) => {
   return ENV.prod;
 };
 
-export const { API_HOST, COOKIE_NAME } = getEnvVars();
+export const { API_HOST, COOKIE_NAME, COMPANY_ID } = getEnvVars();
