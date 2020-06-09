@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AdminEntity {
+  created_at: Date!
+  updated_at: Date!
+  id: ID!
+  first_name: String!
+  last_name: String!
+  active: Boolean!
+  phone: String!
+  email: String!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
 type CompanyAddressEntity {
   created_at: Date!
   updated_at: Date!
@@ -15,9 +29,6 @@ type CompanyAddressEntity {
   coord_lat: Float!
   coord_lng: Float!
 }
-
-"""Date custom scalar type"""
-scalar Date
 
 type OrderPointEntity {
   created_at: Date!
@@ -75,12 +86,34 @@ type Query {
 }
 
 type Mutation {
+  adminCreate(input: AdminCreateInput!): AdminEntity!
+  adminCreateVerify(input: AdminVefiySmsInput!): AdminEntity!
+  adminLogin(input: AdminLoginInput!): AdminEntity!
+  adminVerfiyLogin(input: AdminVefiySmsInput!): AdminEntity!
   createCompany(name: String!): CompanyEntity!
   employeeCreate(input: CreateEmployeeInput!): EmployeeEntity!
   employeeAdminLogin(input: UserLoginInput!): EmployeeEntity!
   employeeStaffLogin(input: DeviceLoginInput!): EmployeeEntity!
   createCompanyAddress(input: CompanyAddressInput!): CompanyAddressEntity!
   createOrderPoint(input: OrderPointInput!): OrderPointEntity!
+}
+
+input AdminCreateInput {
+  first_name: String!
+  last_name: String!
+  phone: String!
+  email: String!
+  password: String!
+}
+
+input AdminVefiySmsInput {
+  email: String!
+  code: String!
+}
+
+input AdminLoginInput {
+  email: String!
+  password: String!
 }
 
 input CreateEmployeeInput {

@@ -22,4 +22,8 @@ export interface IConfig extends CleanEnv {
   SESSION_MAX_AGE: number;
   // JWT
   JWT_SECRET: string;
+  // TWILIO
+  TWILIO_ACCOUNT_SID: string;
+  TWILIO_AUTH_TOKEN: string;
+  TWILIO_VERIFY_SERVICE_SID: string;
 }
