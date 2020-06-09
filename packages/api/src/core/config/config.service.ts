@@ -87,6 +87,20 @@ export class ConfigService {
     return this.envConfig.JWT_SECRET;
   }
 
+  // TWILIO
+
+  get TWILIO_ACCOUNT_SID(): string {
+    return this.envConfig.TWILIO_ACCOUNT_SID;
+  }
+
+  get TWILIO_AUTH_TOKEN(): string {
+    return this.envConfig.TWILIO_AUTH_TOKEN;
+  }
+
+  get TWILIO_VERIFY_SERVICE_SID(): string {
+    return this.envConfig.TWILIO_VERIFY_SERVICE_SID;
+  }
+
   // ENV (envalid defaults)
 
   get isProduction(): boolean {
@@ -124,6 +138,10 @@ export class ConfigService {
       SESSION_MAX_AGE: envalid.num(),
       // JWT
       JWT_SECRET: envalid.str(),
+      // TWILIO
+      TWILIO_ACCOUNT_SID: envalid.str(),
+      TWILIO_AUTH_TOKEN: envalid.str(),
+      TWILIO_VERIFY_SERVICE_SID: envalid.str(),
     };
 
     return envalid.cleanEnv(process.env, rule, { dotEnvPath });

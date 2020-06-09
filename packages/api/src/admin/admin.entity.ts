@@ -1,21 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
-  IsEmail,
   Length,
+  IsEmail,
   MinLength,
   ValidateIf,
   Validate,
+  IsPhoneNumber,
 } from 'class-validator';
 import bcryptjs from 'bcryptjs';
 
-import { BaseEntity } from '../../base/base.entity';
-import { IsUserAlreadyExist } from './user.validator';
-import { UserContextEnum } from './enums/context.enum';
+import { BaseEntity } from '../base/base.entity';
+import { IsAdminAlreadyExist } from './admin.validator';
 
-@Entity('users')
+@Entity('admins')
 @ObjectType()
-export class UserEntity extends BaseEntity {
+export class AdminEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
   public id!: string;
@@ -30,23 +30,27 @@ export class UserEntity extends BaseEntity {
   @Field(() => String)
   public last_name!: string;
 
+  @Column({ type: 'boolean', default: true })
+  @Field(() => Boolean)
+  public active!: boolean;
+
+  @Column('text')
+  @IsPhoneNumber('US', { message: 'invalid format' })
+  @ValidateIf(u => !u.id)
+  @Validate(IsAdminAlreadyExist)
+  @Field(() => String)
+  public phone!: string;
+
   @Column({ type: 'varchar', length: 255 })
   @IsEmail({}, { message: 'invalid format' })
   @ValidateIf(u => !u.id)
-  @Validate(IsUserAlreadyExist)
+  @Validate(IsAdminAlreadyExist)
   @Field(() => String)
   public email!: string;
 
   @Column('text')
   @MinLength(8, { message: '8 character minimum' })
   public password!: string;
-
-  @Column({
-    type: 'enum',
-    enum: UserContextEnum,
-  })
-  @Field(() => UserContextEnum)
-  public context!: UserContextEnum;
 
   @BeforeInsert()
   hashPasswordBeforeInsert() {
